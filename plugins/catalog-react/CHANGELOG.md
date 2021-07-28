@@ -1,5 +1,14 @@
 # @backstage/plugin-catalog-react
 
+## 0.3.2
+
+### Patch Changes
+
+- 19d9995b6: Improve accessibility of core & catalog components by adjusting them with non-breaking changes.
+- 043a4238f: Fix `EntityListProvider` to not update url if unmounted
+- Updated dependencies
+  - @backstage/core-components@0.1.7
+
 ## 0.3.1
 
 ### Patch Changes

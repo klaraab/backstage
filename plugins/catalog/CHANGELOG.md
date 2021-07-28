@@ -1,5 +1,14 @@
 # @backstage/plugin-catalog
 
+## 0.6.9
+
+### Patch Changes
+
+- 19d9995b6: Improve accessibility of core & catalog components by adjusting them with non-breaking changes.
+- Updated dependencies
+  - @backstage/core-components@0.1.7
+  - @backstage/plugin-catalog-react@0.3.2
+
 ## 0.6.8
 
 ### Patch Changes

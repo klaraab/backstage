@@ -1,5 +1,14 @@
 # @backstage/plugin-scaffolder
 
+## 0.10.2
+
+### Patch Changes
+
+- 0d5d0e2e6: chore: set the lifecycle as beta logo
+- Updated dependencies
+  - @backstage/core-components@0.1.7
+  - @backstage/plugin-catalog-react@0.3.2
+
 ## 0.10.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @backstage/core-components
 
+## 0.1.7
+
+### Patch Changes
+
+- 19d9995b6: Improve accessibility of core & catalog components by adjusting them with non-breaking changes.
+
 ## 0.1.6
 
 ### Patch Changes

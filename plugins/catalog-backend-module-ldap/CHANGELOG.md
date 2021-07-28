@@ -1,5 +1,11 @@
 # @backstage/plugin-catalog-backend-module-ldap
 
+## 0.2.2
+
+### Patch Changes
+
+- 2a2a2749b: chore(deps): bump `@types/ldapjs` from 1.0.10 to 2.2.0
+
 ## 0.2.1
 
 ### Patch Changes

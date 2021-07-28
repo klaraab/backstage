@@ -1,5 +1,11 @@
 # @backstage/create-app
 
+## 0.3.33
+
+### Patch Changes
+
+- d50c9e7c0: Update the `software-templates` to point to `main` branch instead of `master`
+
 ## 0.3.32
 
 ### Patch Changes

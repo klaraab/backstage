@@ -1,5 +1,15 @@
 # @backstage/plugin-api-docs
 
+## 0.6.4
+
+### Patch Changes
+
+- bebc09fa8: Add explicit import for `isomorphic-form-data` needed for `swagger-ui-react`
+- Updated dependencies
+  - @backstage/core-components@0.1.7
+  - @backstage/plugin-catalog@0.6.9
+  - @backstage/plugin-catalog-react@0.3.2
+
 ## 0.6.3
 
 ### Patch Changes
