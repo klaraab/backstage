@@ -14,7 +14,14 @@
  * limitations under the License.
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  ChangeEvent,
+  MouseEvent,
+} from 'react';
 import {
   createStyles,
   Theme,
@@ -98,7 +105,7 @@ const DialogActions = withStyles((theme: Theme) => ({
 type Props = {
   entities?: Entity[];
   openAdd: boolean;
-  handleClose: any;
+  handleClose: () => void;
 };
 
 export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
@@ -109,8 +116,8 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
   const [bazaarDescription, setBazaarDescription] = useState('');
   const [status, setStatus] = useState('proposed');
 
-  const { value, loading } = useAsync(async (): Promise<any[]> => {
-    return await getBranches(auth, selectedEntity);
+  const { value, loading } = useAsync(async (): Promise<string[]> => {
+    return selectedEntity ? await getBranches(auth, selectedEntity) : [];
   }, [selectedEntity]);
 
   const [openNoBranches, setOpenNoBranches] = useState(
@@ -125,7 +132,7 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
     setOpenNoBranches(false);
   };
 
-  const branch = useRef(value?.[0] ? value[0].name : '');
+  const branch = useRef(value?.[0] || '');
   const [, setBranchState] = useState(branch.current);
 
   const predefinedTags = [
@@ -149,23 +156,30 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
       : [],
   );
 
-  const handleBazaarDescription = event => {
+  const handleBazaarDescription = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
     setBazaarDescription(event.target.value);
   };
 
-  const handleTitleChange = event => {
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitle(event.target.value);
   };
 
-  const handleCommitMessageChange = event => {
+  const handleCommitMessageChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
     setCommitMessage(event.target.value);
   };
 
-  const handleStatusChange = selectedStatus => {
+  const handleStatusChange = (selectedStatus: string): void => {
     setStatus(selectedStatus);
   };
 
-  const handleTagChange = (event, values) => {
+  const handleTagChange = (
+    event: MouseEvent<HTMLInputElement>,
+    values: string[],
+  ) => {
     setTags(values);
   };
 
@@ -225,11 +239,10 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
     }
   };
 
-  const handleSubmit = async event => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     validate();
 
-    if (!isInvalid.current) {
+    if (!isInvalid.current && selectedEntity) {
       const clonedEntity = editBazaarProperties(
         selectedEntity,
         bazaarDescription,
@@ -306,7 +319,7 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
           />
 
           <InputSelector
-            options={value?.map((b: any) => b.name) || []}
+            options={value || []}
             value={branch.current}
             onChange={handleBranchChange}
             isFormInvalid={isFormInvalid}
