@@ -113,7 +113,7 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
   const [selectedEntity, setSelectedEntity] = useState(
     entities ? entities[0] : null,
   );
-  const [bazaarDescription, setBazaarDescription] = useState('');
+  const [description, setDescription] = useState('');
   const [status, setStatus] = useState('proposed');
 
   const { value, loading } = useAsync(async (): Promise<string[]> => {
@@ -156,10 +156,10 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
       : [],
   );
 
-  const handleBazaarDescription = (
+  const handleDescriptionChange = (
     event: ChangeEvent<HTMLInputElement>,
   ): void => {
-    setBazaarDescription(event.target.value);
+    setDescription(event.target.value);
   };
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -189,7 +189,7 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
   };
 
   const clearForm = useCallback(() => {
-    setBazaarDescription('');
+    setDescription('');
     setStatus('proposed');
 
     setTags(
@@ -227,7 +227,7 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
     if (
       commitMessage === '' ||
       title === '' ||
-      bazaarDescription === '' ||
+      description === '' ||
       status === '' ||
       branch.current === ''
     ) {
@@ -245,7 +245,7 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
     if (!isInvalid.current && selectedEntity) {
       const clonedEntity = editBazaarProperties(
         selectedEntity,
-        bazaarDescription,
+        description,
         tags,
         status,
       );
@@ -289,8 +289,8 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
           />
 
           <InputField
-            value={bazaarDescription}
-            onChange={handleBazaarDescription}
+            value={description}
+            onChange={handleDescriptionChange}
             isFormInvalid={isFormInvalid}
             inputType="Bazaar description"
             placeholder="Describe who you are and what skills you are looking for"

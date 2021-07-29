@@ -22,7 +22,7 @@ import { Alert } from '@material-ui/lab';
 type Props = {
   open: boolean;
   message: string;
-  handleClose: any;
+  handleClose: () => void;
 };
 
 export const AlertBanner = ({ open, message, handleClose }: Props) => {

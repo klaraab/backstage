@@ -272,7 +272,7 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
         />
 
         <InputSelector
-          options={value?.map((b: any) => b.name) || []}
+          options={value || []}
           value={branch.current}
           onChange={handleBranchChange}
           isFormInvalid={isFormInvalid}

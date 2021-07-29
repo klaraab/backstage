@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, ChangeEvent, MouseEvent } from 'react';
 import {
   createStyles,
   Theme,
@@ -55,6 +55,10 @@ const styles = (theme: Theme) =>
     },
   });
 
+/*
+  DialogTitleProps, DialogTitle, DialogContent and DialogActions 
+  are copied from the git-release plugin
+*/
 export interface DialogTitleProps extends WithStyles<typeof styles> {
   id: string;
   children: React.ReactNode;
@@ -93,9 +97,9 @@ const DialogActions = withStyles((theme: Theme) => ({
 }))(MuiDialogActions);
 
 type Props = {
-  entity?: Entity;
+  entity: Entity;
   openDelete: boolean;
-  handleClose: any;
+  handleClose: () => void;
 };
 
 export const DeleteProjectDialog = ({
@@ -105,11 +109,11 @@ export const DeleteProjectDialog = ({
 }: Props) => {
   const auth = useApi(githubAuthApiRef);
 
-  const { value } = useAsync(async (): Promise<any[]> => {
+  const { value } = useAsync(async (): Promise<string[]> => {
     return await getBranches(auth, entity);
   }, []);
 
-  const branch = useRef(value?.[0] ? value[0].name : '');
+  const branch = useRef(value?.[0] || '');
   const [, setBranchState] = useState(branch.current);
 
   const [title, setTitle] = useState('Delete project from the Bazaar');
@@ -119,11 +123,13 @@ export const DeleteProjectDialog = ({
   const isInvalid = useRef(false);
   const [isFormInvalid, setIsFormInvalid] = useState(false);
 
-  const handleTitleChange = event => {
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitle(event.target.value);
   };
 
-  const handleCommitMessageChange = event => {
+  const handleCommitMessageChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
     setCommitMessage(event.target.value);
   };
 
@@ -155,8 +161,7 @@ export const DeleteProjectDialog = ({
     }
   };
 
-  const handleSubmit = async event => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     validate();
 
     if (!isInvalid.current) {
