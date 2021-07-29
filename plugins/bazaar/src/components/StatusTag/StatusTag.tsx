@@ -15,11 +15,7 @@
  */
 
 import React from 'react';
-import {
-  StatusAborted,
-  StatusOK,
-  StatusWarning,
-} from '@backstage/core-components';
+import { StatusOK, StatusWarning } from '@backstage/core-components';
 
 interface Status {
   [key: string]: JSX.Element | undefined;
@@ -28,7 +24,6 @@ interface Status {
 const statuses: Status = {
   proposed: <StatusWarning data-testid="warning">proposed</StatusWarning>,
   ongoing: <StatusOK data-testid="ok">ongoing</StatusOK>,
-  archived: <StatusAborted data-testid="aborted">archived</StatusAborted>,
 };
 
 type Props = {

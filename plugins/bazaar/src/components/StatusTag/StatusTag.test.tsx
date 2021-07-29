@@ -33,10 +33,6 @@ it('should render tags', async () => {
       status: 'ongoing',
       childComponent: 'ok',
     },
-    {
-      status: 'archived',
-      childComponent: 'aborted',
-    },
   ];
 
   tags.map(async tag => {
