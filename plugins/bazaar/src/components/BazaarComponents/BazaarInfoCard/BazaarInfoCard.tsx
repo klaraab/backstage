@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React, { useState } from 'react';
 import {
   Grid,
@@ -37,7 +38,6 @@ import ChatIcon from '@material-ui/icons/Chat';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useApi, identityApiRef } from '@backstage/core-plugin-api';
 import { EditProjectDialog } from '../EditProjectDialog';
 import { DeleteProjectDialog } from '../DeleteProjectDialog';
 import { HeaderIconLinkRow, IconLinkVerticalProps } from '@backstage/core';
@@ -81,7 +81,7 @@ export const isBazaarAvailable = (entity: Entity) => {
 };
 
 export const BazaarInfoCard = () => {
-  const entity = useEntity();
+  const { entity } = useEntity();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement>();
   const [openEdit, setOpenEdit] = useState(false);
@@ -121,11 +121,11 @@ export const BazaarInfoCard = () => {
     <Card>
       <EditProjectDialog
         openEdit={openEdit}
-        entity={entity.entity}
+        entity={entity}
         handleClose={closeEdit}
       />
       <DeleteProjectDialog
-        entity={entity.entity}
+        entity={entity}
         openDelete={openDelete}
         handleClose={closeDelete}
       />
@@ -172,8 +172,8 @@ export const BazaarInfoCard = () => {
         <Grid container>
           <Grid item xs={12}>
             <AboutField label="Bazaar description">
-              {entity?.entity?.metadata?.bazaar?.bazaar_description
-                ? entity?.entity?.metadata?.bazaar?.bazaar_description
+              {entity?.metadata?.bazaar?.bazaar_description
+                ? entity?.metadata?.bazaar?.bazaar_description
                     .split('\n')
                     .map(str => (
                       <Typography
@@ -191,9 +191,7 @@ export const BazaarInfoCard = () => {
 
           <Grid item xs={6}>
             <AboutField label="Status">
-              <StatusTag
-                status={entity?.entity?.metadata?.bazaar?.status as string}
-              />
+              <StatusTag status={entity?.metadata?.bazaar?.status as string} />
             </AboutField>
           </Grid>
         </Grid>

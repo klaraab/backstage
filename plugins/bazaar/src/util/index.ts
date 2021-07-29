@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export * from './githubUtils';
+export { getBranches, createPullRequest } from './githubUtils';

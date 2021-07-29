@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState, useRef, useEffect } from 'react';
+
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   createStyles,
   Theme,
@@ -105,7 +106,6 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
   const [selectedEntity, setSelectedEntity] = useState(
     entities ? entities[0] : null,
   );
-  const [, setName] = useState(selectedEntity?.metadata.name);
   const [bazaarDescription, setBazaarDescription] = useState('');
   const [status, setStatus] = useState('proposed');
 
@@ -174,9 +174,10 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
     setBranchState(branchName);
   };
 
-  const clearForm = () => {
+  const clearForm = useCallback(() => {
     setBazaarDescription('');
     setStatus('proposed');
+
     setTags(
       selectedEntity?.metadata?.tags
         ? selectedEntity?.metadata?.tags?.filter(
@@ -190,7 +191,7 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
     isInvalid.current = false;
     branch.current = '';
     setBranchState('');
-  };
+  }, [selectedEntity]);
 
   const handleCloseAndClear = () => {
     handleClose();
@@ -201,8 +202,6 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
     if (value?.length === 0) {
       setOpenNoBranches(true);
     }
-
-    setName(entity.metadata.name);
     setSelectedEntity(entity);
   };
 

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
@@ -39,17 +40,17 @@ export const InputMultiSelector = ({
       options={options}
       freeSolo
       onChange={onChange}
-      defaultValue={value}
-      renderTags={(tags: string[], getTagProps) =>
-        tags.map((option: string, index: number) => (
+      value={value}
+      renderTags={(tags: string[], getTagProps) => {
+        return tags.map((option: string, index: number) => (
           <Chip
             variant="outlined"
             size="small"
             label={option}
             {...getTagProps({ index })}
           />
-        ))
-      }
+        ));
+      }}
       renderInput={params => <TextField {...params} label={label} />}
     />
   );

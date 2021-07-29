@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from 'react';
 import { screen, cleanup } from '@testing-library/react';
 import { ProjectPreview, compareEntitiesByDate } from './ProjectPreview';
@@ -40,8 +41,7 @@ const card1: Entity = {
     status: 'ongoing',
     tags: ['java', 'docker'],
     bazaar: {
-      last_modified:
-        'Tue Jul 20 2021 10:49:55 GMT+0200 (Central European Summer Time)',
+      last_modified: '2021-07-29T09:06:59.282Z',
     },
   },
 };
@@ -56,8 +56,7 @@ const card2: Entity = {
     status: 'proposed',
     tags: ['go', 'kubernetes'],
     bazaar: {
-      last_modified:
-        'Tue Jul 20 2021 08:49:55 GMT+0200 (Central European Summer Time)',
+      last_modified: '2021-07-29T07:06:59.282Z',
     },
   },
 };
@@ -72,8 +71,7 @@ const card3: Entity = {
     status: 'proposed',
     tags: [],
     bazaar: {
-      last_modified:
-        'Tue Jul 20 2021 09:49:55 GMT+0200 (Central European Summer Time)',
+      last_modified: '2021-07-29T08:06:59.282Z',
     },
   },
 };

@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from 'react';
-import {
-  catalogApiRef,
-  CatalogApi,
-  EntityProvider,
-  entityRouteRef,
-} from '@backstage/plugin-catalog-react';
-import { render } from '@testing-library/react';
+import { catalogApiRef, CatalogApi } from '@backstage/plugin-catalog-react';
 import { HomePage } from './HomePage';
-import { rest } from 'msw';
-import { setupServer } from 'msw/node';
-// import { msw } from '@backstage/test-utils';
-import { BrowserRouter as Router } from 'react-router-dom';
+
 import { ApiProvider, ApiRegistry } from '@backstage/core-app-api';
-import { Entity, EntityMeta, RELATION_PART_OF } from '@backstage/catalog-model';
-import { ThemeProvider } from '@material-ui/core';
-import { lightTheme } from '@backstage/theme';
-import { msw, renderInTestApp } from '@backstage/test-utils';
-import { costInsightsPlugin } from '@backstage/plugin-cost-insights';
+import { Entity, EntityMeta } from '@backstage/catalog-model';
+import { renderInTestApp } from '@backstage/test-utils';
 
 describe('HomePage', () => {
   it('should render', async () => {
@@ -42,7 +31,7 @@ describe('HomePage', () => {
           metadata: testMeta,
           apiVersion: '0',
           kind: 'Component',
-          spec: { owner: 'blabla' },
+          spec: { owner: 'owner' },
         };
         return Promise.resolve({
           items: [testEntity] as Entity[],
@@ -57,15 +46,5 @@ describe('HomePage', () => {
     );
 
     expect(await rendered.findAllByText('testComponent')).toBeInTheDocument();
-    // console.log(rendered);
-
-    // console.log("should be progress element ", await rendered.findByTestId('bazaar-header'));
-    // expect(await rendered.findByTestId('progress')).toBeInTheDocument();
-    // console.log("före");
-    // setTimeout(() => {
-    //   console.log("set timeout");
-    //   return "hej";
-    // }, 2000);
-    // console.log("efter");
   });
 });

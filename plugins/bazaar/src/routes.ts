@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import { createRouteRef } from '@backstage/core';
 
 export const rootRouteRef = createRouteRef({
   title: 'bazaar',
 });
-
-// export const projectPageRouteRef = createRouteRef({
-//   title: 'bazaar/:id',
-// });

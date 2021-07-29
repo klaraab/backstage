@@ -15,14 +15,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import {
-  Button,
-  makeStyles,
-  Grid,
-  Typography,
-  Link,
-  CardContent,
-} from '@material-ui/core';
+import { Button, makeStyles, Grid, Typography, Link } from '@material-ui/core';
 import {
   Header,
   Content,
@@ -72,7 +65,6 @@ import { useApi } from '@backstage/core-plugin-api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { usePromiseTracker, trackPromise } from 'react-promise-tracker';
-import { AboutField } from '@backstage/plugin-catalog';
 
 export const HomePage = () => {
   const location = useLocation();
