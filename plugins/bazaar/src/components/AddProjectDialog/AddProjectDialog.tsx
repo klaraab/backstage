@@ -193,6 +193,10 @@ export const AddProjectDialog = ({ entities, openAdd, handleClose }: Props) => {
     setBranchState('');
   }, [selectedEntity]);
 
+  useEffect(() => {
+    clearForm();
+  }, [selectedEntity, clearForm]);
+
   const handleCloseAndClear = () => {
     handleClose();
     clearForm();
