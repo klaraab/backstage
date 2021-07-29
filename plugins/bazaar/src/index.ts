@@ -15,7 +15,4 @@
  */
 
 export { bazaarPlugin, BazaarPage } from './plugin';
-export {
-  isBazaarAvailable,
-  BazaarInfoCard,
-} from './components/BazaarComponents/BazaarInfoCard';
+export { isBazaarAvailable, BazaarInfoCard } from './components/BazaarInfoCard';

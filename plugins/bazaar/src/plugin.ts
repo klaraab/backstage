@@ -27,8 +27,7 @@ export const bazaarPlugin = createPlugin({
 
 export const BazaarPage = bazaarPlugin.provide(
   createRoutableExtension({
-    component: () =>
-      import('./components/BazaarComponents/HomePage').then(m => m.HomePage),
+    component: () => import('./components/HomePage').then(m => m.HomePage),
     mountPoint: rootRouteRef,
   }),
 );

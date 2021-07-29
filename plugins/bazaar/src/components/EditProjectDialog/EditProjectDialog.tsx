@@ -33,8 +33,9 @@ import { Entity } from '@backstage/catalog-model';
 import { useApi, githubAuthApiRef } from '@backstage/core-plugin-api';
 import { useAsync } from 'react-use';
 import { InputField } from '../InputField';
-import { createPullRequest, getBranches } from '../../../util/githubUtils';
-import { deleteProperties } from '../../../util/editBazaarProperties';
+import { InputMultiSelector } from '../InputMultiSelector';
+import { createPullRequest, getBranches } from '../../util/githubUtils';
+import { editBazaarProperties } from '../../util/editBazaarProperties';
 import { InputSelector } from '../InputSelector';
 
 const styles = (theme: Theme) =>
@@ -94,16 +95,27 @@ const DialogActions = withStyles((theme: Theme) => ({
 
 type Props = {
   entity?: Entity;
-  openDelete: boolean;
+  openEdit: boolean;
   handleClose: any;
 };
 
-export const DeleteProjectDialog = ({
-  entity,
-  openDelete,
-  handleClose,
-}: Props) => {
+const predefinedTags = [
+  'java',
+  'javascript',
+  'go',
+  'python',
+  'kubernetes',
+  'docker',
+];
+
+export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
   const auth = useApi(githubAuthApiRef);
+
+  const [bazaarDescription, setBazaarDescription] = useState(
+    entity.metadata?.bazaar?.bazaar_description,
+  );
+
+  const [status, setStatus] = useState(entity?.metadata?.bazaar?.status);
 
   const { value } = useAsync(async (): Promise<any[]> => {
     return await getBranches(auth, entity);
@@ -111,13 +123,21 @@ export const DeleteProjectDialog = ({
 
   const branch = useRef(value?.[0] ? value[0].name : '');
   const [, setBranchState] = useState(branch.current);
-
-  const [title, setTitle] = useState('Delete project from the Bazaar');
+  const [title, setTitle] = useState('Edit project');
   const [commitMessage, setCommitMessage] = useState(
     'update catalog-info.yaml',
   );
   const isInvalid = useRef(false);
   const [isFormInvalid, setIsFormInvalid] = useState(false);
+  const [tags, setTags] = useState<string[]>(
+    entity.metadata?.tags
+      ? entity.metadata?.tags?.filter(tag => tag !== 'bazaar')
+      : [],
+  );
+
+  const handleBazaarDescription = event => {
+    setBazaarDescription(event.target.value);
+  };
 
   const handleTitleChange = event => {
     setTitle(event.target.value);
@@ -127,13 +147,28 @@ export const DeleteProjectDialog = ({
     setCommitMessage(event.target.value);
   };
 
+  const handleStatusChange = event => {
+    setStatus(event);
+  };
+
+  const handleTagChange = (event, values) => {
+    setTags(values);
+  };
+
   const handleBranchChange = (branchName: string) => {
     branch.current = branchName;
     setBranchState(branchName);
   };
 
   const clearForm = () => {
-    setTitle('Delete project from the Bazaar');
+    setBazaarDescription(entity.metadata?.bazaar?.bazaar_description);
+    setStatus(entity.metadata?.bazaar?.status);
+    setTags(
+      entity.metadata?.tags
+        ? entity.metadata?.tags?.filter((tag: string) => tag !== 'bazaar')
+        : [],
+    );
+    setTitle('Edit project');
     setCommitMessage('update catalog-info.yaml');
     setIsFormInvalid(false);
     isInvalid.current = false;
@@ -146,7 +181,13 @@ export const DeleteProjectDialog = ({
   };
 
   const validate = () => {
-    if (commitMessage === '' || title === '' || branch.current === '') {
+    if (
+      commitMessage === '' ||
+      title === '' ||
+      bazaarDescription === '' ||
+      status === '' ||
+      branch.current === ''
+    ) {
       isInvalid.current = true;
       setIsFormInvalid(true);
     } else {
@@ -160,16 +201,12 @@ export const DeleteProjectDialog = ({
     validate();
 
     if (!isInvalid.current) {
-      const clonedEntity = deleteProperties(JSON.parse(JSON.stringify(entity)));
-      delete clonedEntity.metadata.bazaar;
-
-      if (clonedEntity.metadata.tags === ['bazaar']) {
-        delete clonedEntity.metadata.tags;
-      } else {
-        clonedEntity.metadata.tags = clonedEntity.metadata.tags?.filter(
-          tag => tag !== 'bazaar',
-        );
-      }
+      const clonedEntity = editBazaarProperties(
+        entity,
+        bazaarDescription,
+        tags,
+        status,
+      );
 
       await createPullRequest(
         auth,
@@ -188,13 +225,35 @@ export const DeleteProjectDialog = ({
       maxWidth="xs"
       onClose={handleCloseAndClear}
       aria-labelledby="customized-dialog-title"
-      open={openDelete}
+      open={openEdit}
     >
       <DialogTitle id="customized-dialog-title" onClose={handleCloseAndClear}>
-        Delete project
+        Edit project
       </DialogTitle>
 
       <DialogContent dividers>
+        <InputField
+          value={bazaarDescription}
+          onChange={handleBazaarDescription}
+          isFormInvalid={isFormInvalid}
+          inputType="Bazaar description"
+        />
+
+        <InputSelector
+          options={['proposed', 'ongoing']}
+          value={status}
+          onChange={handleStatusChange}
+          isFormInvalid={isFormInvalid}
+          label="Status"
+        />
+
+        <InputMultiSelector
+          value={tags}
+          onChange={handleTagChange}
+          options={predefinedTags}
+          label="Tags"
+        />
+
         <InputField
           value={title}
           onChange={handleTitleChange}
