@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, ChangeEvent, MouseEvent } from 'react';
 import {
   createStyles,
   Theme,
@@ -56,6 +56,10 @@ const styles = (theme: Theme) =>
     },
   });
 
+/*
+  DialogTitleProps, DialogTitle, DialogContent and DialogActions 
+  are copied from the git-release plugin
+*/
 export interface DialogTitleProps extends WithStyles<typeof styles> {
   id: string;
   children: React.ReactNode;
@@ -94,9 +98,9 @@ const DialogActions = withStyles((theme: Theme) => ({
 }))(MuiDialogActions);
 
 type Props = {
-  entity?: Entity;
+  entity: Entity;
   openEdit: boolean;
-  handleClose: any;
+  handleClose: () => void;
 };
 
 const predefinedTags = [
@@ -111,17 +115,17 @@ const predefinedTags = [
 export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
   const auth = useApi(githubAuthApiRef);
 
-  const [bazaarDescription, setBazaarDescription] = useState(
+  const [description, setDescription] = useState(
     entity.metadata?.bazaar?.bazaar_description,
   );
 
   const [status, setStatus] = useState(entity?.metadata?.bazaar?.status);
 
-  const { value } = useAsync(async (): Promise<any[]> => {
+  const { value } = useAsync(async (): Promise<string[]> => {
     return await getBranches(auth, entity);
   }, []);
 
-  const branch = useRef(value?.[0] ? value[0].name : '');
+  const branch = useRef(value?.[0] || '');
   const [, setBranchState] = useState(branch.current);
   const [title, setTitle] = useState('Edit project');
   const [commitMessage, setCommitMessage] = useState(
@@ -135,23 +139,30 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
       : [],
   );
 
-  const handleBazaarDescription = event => {
-    setBazaarDescription(event.target.value);
+  const handleDescriptionChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
+    setDescription(event.target.value);
   };
 
-  const handleTitleChange = event => {
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setTitle(event.target.value);
   };
 
-  const handleCommitMessageChange = event => {
+  const handleCommitMessageChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ): void => {
     setCommitMessage(event.target.value);
   };
 
-  const handleStatusChange = event => {
-    setStatus(event);
+  const handleStatusChange = (selectedStatus: string): void => {
+    setStatus(selectedStatus);
   };
 
-  const handleTagChange = (event, values) => {
+  const handleTagChange = (
+    event: MouseEvent<HTMLInputElement>,
+    values: string[],
+  ) => {
     setTags(values);
   };
 
@@ -161,7 +172,7 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
   };
 
   const clearForm = () => {
-    setBazaarDescription(entity.metadata?.bazaar?.bazaar_description);
+    setDescription(entity.metadata?.bazaar?.bazaar_description);
     setStatus(entity.metadata?.bazaar?.status);
     setTags(
       entity.metadata?.tags
@@ -184,7 +195,7 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
     if (
       commitMessage === '' ||
       title === '' ||
-      bazaarDescription === '' ||
+      description === '' ||
       status === '' ||
       branch.current === ''
     ) {
@@ -196,14 +207,13 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
     }
   };
 
-  const handleSubmit = async event => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     validate();
 
     if (!isInvalid.current) {
       const clonedEntity = editBazaarProperties(
         entity,
-        bazaarDescription,
+        description,
         tags,
         status,
       );
@@ -233,8 +243,8 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
 
       <DialogContent dividers>
         <InputField
-          value={bazaarDescription}
-          onChange={handleBazaarDescription}
+          value={description}
+          onChange={handleDescriptionChange}
           isFormInvalid={isFormInvalid}
           inputType="Bazaar description"
         />
