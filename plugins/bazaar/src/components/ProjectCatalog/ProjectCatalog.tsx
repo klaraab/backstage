@@ -20,6 +20,7 @@ import { Table, TableColumn, TableFilter } from '@backstage/core-components';
 import { StatusTag } from '../StatusTag/StatusTag';
 import { Link as RouterLink } from 'react-router-dom';
 import { Entity } from '@backstage/catalog-model';
+import { JsonObject } from '@backstage/config';
 
 export default {
   title: 'Data Display/Table',
@@ -72,7 +73,10 @@ export const ProjectCatalog = ({ entities }: Props) => {
     {
       title: 'Status',
       render: (row: Partial<Entity>) => (
-        <StatusTag status={row?.metadata?.bazaar?.status} styles="" />
+        <StatusTag
+          status={(row?.metadata?.bazaar as JsonObject).status as string}
+          styles=""
+        />
       ),
       field: 'metadata.bazaar.status',
       width: '10%',
@@ -93,7 +97,7 @@ export const ProjectCatalog = ({ entities }: Props) => {
       field: 'metadata.description',
       render: (row: Partial<Entity>) => (
         <Typography variant="body2">
-          {row?.metadata?.description.slice(0, 200)}
+          {(row?.metadata?.description as string).slice(0, 200)}
         </Typography>
       ),
       width: '40%',

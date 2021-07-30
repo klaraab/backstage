@@ -21,7 +21,7 @@ import { Alert } from '@material-ui/lab';
 
 type Props = {
   open: boolean;
-  message: string;
+  message: any;
   handleClose: () => void;
 };
 

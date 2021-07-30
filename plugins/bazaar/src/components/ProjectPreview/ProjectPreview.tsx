@@ -18,14 +18,19 @@ import { ItemCardGrid, Content } from '@backstage/core';
 import React from 'react';
 import { ProjectCard } from '../ProjectCard/ProjectCard';
 import { Entity } from '@backstage/catalog-model';
+import { JsonObject } from '@backstage/config';
 
 type Props = {
   entities: Entity[];
 };
 
-export const compareEntitiesByDate = (a: Entity, b: Entity) => {
-  const dateA = new Date(a?.metadata?.bazaar?.last_modified);
-  const dateB = new Date(b?.metadata?.bazaar?.last_modified);
+export const compareEntitiesByDate = (a: Entity, b: Entity): number => {
+  const dateA = new Date(
+    (a?.metadata?.bazaar as JsonObject).last_modified as string,
+  ).getTime();
+  const dateB = new Date(
+    (b?.metadata?.bazaar as JsonObject).last_modified as string,
+  ).getTime();
   return dateB - dateA;
 };
 
@@ -41,7 +46,7 @@ export const ProjectPreview = ({ entities }: Props) => {
           lineHeight: '10rem',
         }}
       >
-        Please add projects to the Bazaar
+        Please add projects to the Bazaar.
       </div>
     );
   }

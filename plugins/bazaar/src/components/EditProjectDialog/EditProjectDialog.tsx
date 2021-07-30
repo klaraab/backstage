@@ -14,13 +14,7 @@
  * limitations under the License.
  */
 
-import React, {
-  useState,
-  useRef,
-  ChangeEvent,
-  MouseEvent,
-  ChangeEventHandler,
-} from 'react';
+import React, { useState, useRef, ChangeEvent } from 'react';
 import {
   createStyles,
   Theme,
@@ -43,6 +37,7 @@ import { InputMultiSelector } from '../InputMultiSelector';
 import { createPullRequest, getBranches } from '../../util/githubUtils';
 import { editBazaarProperties } from '../../util/editBazaarProperties';
 import { InputSelector } from '../InputSelector';
+import { JsonObject } from '@backstage/config';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -121,11 +116,13 @@ const predefinedTags = [
 export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
   const auth = useApi(githubAuthApiRef);
 
+  const bazaarInfo = entity.metadata.bazaar as JsonObject;
+
   const [description, setDescription] = useState(
-    entity.metadata?.bazaar?.bazaar_description,
+    (bazaarInfo.bazaar_description as string) || '',
   );
 
-  const [status, setStatus] = useState(entity?.metadata?.bazaar?.status);
+  const [status, setStatus] = useState(bazaarInfo.status as string);
 
   const { value } = useAsync(async (): Promise<string[]> => {
     return await getBranches(auth, entity);
@@ -175,8 +172,8 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
   };
 
   const clearForm = () => {
-    setDescription(entity.metadata?.bazaar?.bazaar_description);
-    setStatus(entity.metadata?.bazaar?.status);
+    setDescription((bazaarInfo?.bazaar_description as string) || '');
+    setStatus(bazaarInfo.status as string);
     setTags(
       entity.metadata?.tags
         ? entity.metadata?.tags?.filter((tag: string) => tag !== 'bazaar')
@@ -246,7 +243,7 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
 
       <DialogContent dividers>
         <InputField
-          value={description}
+          value={description as string}
           onChange={handleDescriptionChange}
           isFormInvalid={isFormInvalid}
           inputType="Bazaar description"
@@ -254,7 +251,7 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
 
         <InputSelector
           options={['proposed', 'ongoing']}
-          value={status}
+          value={status as string}
           onChange={handleStatusChange}
           isFormInvalid={isFormInvalid}
           label="Status"

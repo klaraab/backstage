@@ -27,6 +27,7 @@ import { StatusTag } from '../StatusTag/StatusTag';
 import { Link as RouterLink } from 'react-router-dom';
 import { Entity } from '@backstage/catalog-model';
 import moment from 'moment';
+import { JsonObject } from '@backstage/config';
 
 const useStyles = makeStyles({
   statusTag: {
@@ -44,7 +45,7 @@ type Props = {
 export const ProjectCard = ({ entity }: Props) => {
   const classes = useStyles();
   const { uid, name, description, tags } = entity.metadata;
-  const { status, last_modified } = entity.metadata.bazaar;
+  const { status, last_modified } = entity.metadata.bazaar as JsonObject;
 
   return (
     <Card data-testid={`card-${uid}`} key={uid}>
@@ -54,10 +55,10 @@ export const ProjectCard = ({ entity }: Props) => {
       >
         <ItemCardHeader
           title={name}
-          subtitle={`updated ${moment(last_modified).fromNow()}`}
+          subtitle={`updated ${moment(last_modified as string).fromNow()}`}
         />
         <CardContent>
-          <StatusTag styles={classes.statusTag} status={status} />
+          <StatusTag styles={classes.statusTag} status={status as string} />
         </CardContent>
         <CardContent>{description?.slice(0, 180)}</CardContent>
         <CardContent>

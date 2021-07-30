@@ -207,7 +207,18 @@ export const HomePage = () => {
           <div>
             <AlertBanner
               open={openNoProjects}
-              message="No project available. Please create a project from a template first."
+              message={
+                <div>
+                  No project available. Please{' '}
+                  <Link
+                    style={{ color: 'inherit', fontWeight: 'bold' }}
+                    href="/create"
+                  >
+                    create a project
+                  </Link>{' '}
+                  from a template first.
+                </div>
+              }
               handleClose={handleCloseNoProjects}
             />
             <Header

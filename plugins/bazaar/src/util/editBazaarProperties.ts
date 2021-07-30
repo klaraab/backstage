@@ -15,6 +15,7 @@
  */
 
 import { Entity } from '@backstage/catalog-model';
+import { JsonObject } from '@backstage/config';
 
 export const deleteProperties = (clonedEntity: Entity) => {
   delete clonedEntity.metadata.uid;
@@ -42,9 +43,11 @@ const addBazaarProperties = (
   status: string,
 ) => {
   if (clonedEntity.metadata.bazaar) {
-    clonedEntity.metadata.bazaar.bazaar_description = bazaarDescription;
-    clonedEntity.metadata.bazaar.status = status;
-    clonedEntity.metadata.bazaar.last_modified = new Date().toISOString();
+    (clonedEntity?.metadata
+      ?.bazaar as JsonObject).bazaar_description = bazaarDescription;
+    (clonedEntity?.metadata?.bazaar as JsonObject).status = status;
+    (clonedEntity?.metadata
+      ?.bazaar as JsonObject).last_modified = new Date().toISOString();
   }
 };
 

@@ -41,6 +41,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { EditProjectDialog } from '../EditProjectDialog';
 import { DeleteProjectDialog } from '../DeleteProjectDialog';
 import { HeaderIconLinkRow, IconLinkVerticalProps } from '@backstage/core';
+import { JsonObject } from '@backstage/config';
 
 const useStyles = makeStyles({
   title: {
@@ -172,8 +173,9 @@ export const BazaarInfoCard = () => {
         <Grid container>
           <Grid item xs={12}>
             <AboutField label="Bazaar description">
-              {entity?.metadata?.bazaar?.bazaar_description
-                ? entity?.metadata?.bazaar?.bazaar_description
+              {(entity?.metadata?.bazaar as JsonObject).bazaar_description
+                ? ((entity?.metadata?.bazaar as JsonObject)
+                    .bazaar_description as string)
                     .split('\n')
                     .map((str: string) => (
                       <Typography
@@ -191,7 +193,11 @@ export const BazaarInfoCard = () => {
 
           <Grid item xs={6}>
             <AboutField label="Status">
-              <StatusTag status={entity?.metadata?.bazaar?.status as string} />
+              <StatusTag
+                status={
+                  (entity?.metadata?.bazaar as JsonObject).status as string
+                }
+              />
             </AboutField>
           </Grid>
         </Grid>
