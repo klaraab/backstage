@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import TextField from '@material-ui/core/TextField';
 
 type Props = {
   value: string;
-  onChange: any;
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   isFormInvalid: boolean;
   inputType: string;
   placeholder?: string;

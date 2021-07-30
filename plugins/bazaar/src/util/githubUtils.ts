@@ -24,6 +24,7 @@ import {
   SessionApi,
 } from '@backstage/core-plugin-api';
 import { Entity } from '@backstage/catalog-model';
+import { JsonObject } from '@backstage/config';
 
 export const getBranches = async (
   auth: OAuthApi & ProfileInfoApi & BackstageIdentityApi & SessionApi,
@@ -37,7 +38,10 @@ export const getBranches = async (
   const branchResponse = await octokit.request(
     `https://api.github.com/repos/${owner}/${name}/branches`,
   );
-  return branchResponse.data.filter(branch => branch.name !== 'master');
+
+  return branchResponse.data
+    .filter((branch: JsonObject) => branch.name !== 'master')
+    .map((branch: JsonObject) => branch.name);
 };
 
 export const createPullRequest = async (
@@ -45,12 +49,12 @@ export const createPullRequest = async (
   title: string,
   commitMessage: string,
   branch: string,
-  clonedEntity: any,
+  clonedEntity: Entity,
 ) => {
   const token = await auth.getAccessToken('repo');
   const octokit = new Octokit({ auth: token });
 
-  const owner = clonedEntity.spec.owner;
+  const owner = clonedEntity?.spec?.owner;
   const repo = clonedEntity.metadata.name;
   const path = 'catalog-info.yaml';
 

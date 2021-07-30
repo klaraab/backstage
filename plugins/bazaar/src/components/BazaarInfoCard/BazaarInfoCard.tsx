@@ -175,7 +175,7 @@ export const BazaarInfoCard = () => {
               {entity?.metadata?.bazaar?.bazaar_description
                 ? entity?.metadata?.bazaar?.bazaar_description
                     .split('\n')
-                    .map(str => (
+                    .map((str: string) => (
                       <Typography
                         key={Math.floor(Math.random() * 1000)}
                         variant="body2"

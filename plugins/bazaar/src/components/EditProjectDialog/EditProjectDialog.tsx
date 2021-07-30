@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-import React, { useState, useRef, ChangeEvent, MouseEvent } from 'react';
+import React, {
+  useState,
+  useRef,
+  ChangeEvent,
+  MouseEvent,
+  ChangeEventHandler,
+} from 'react';
 import {
   createStyles,
   Theme,
@@ -159,10 +165,7 @@ export const EditProjectDialog = ({ entity, openEdit, handleClose }: Props) => {
     setStatus(selectedStatus);
   };
 
-  const handleTagChange = (
-    event: MouseEvent<HTMLInputElement>,
-    values: string[],
-  ) => {
+  const handleTagChange = (event: ChangeEvent<{}>, values: string[]) => {
     setTags(values);
   };
 

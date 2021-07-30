@@ -22,9 +22,9 @@ import Select from '@material-ui/core/Select';
 
 type Props = {
   value: string;
-  onChange: any;
+  onChange: (option: string) => void;
   isFormInvalid: boolean;
-  options: any[];
+  options: string[];
   label: string;
 };
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useRef, ChangeEvent, MouseEvent } from 'react';
+import React, { useState, useRef, ChangeEvent } from 'react';
 import {
   createStyles,
   Theme,
@@ -208,7 +208,7 @@ export const DeleteProjectDialog = ({
         />
 
         <InputSelector
-          options={value?.map((b: any) => b.name) || []}
+          options={value || []}
           value={branch.current}
           onChange={handleBranchChange}
           isFormInvalid={isFormInvalid}

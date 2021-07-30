@@ -24,8 +24,8 @@ import { Entity } from '@backstage/catalog-model';
 type Props = {
   entities: Entity[];
   value: string;
-  onChange: any;
-  isFormInvalid: any;
+  onChange: (entity: Entity) => void;
+  isFormInvalid: boolean;
 };
 
 export const ProjectSelector = ({
